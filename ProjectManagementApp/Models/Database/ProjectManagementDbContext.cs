@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using ProjectManagementApp.Models.Database.Entities;
 using System;
 using System.Collections.Generic;
@@ -7,7 +9,8 @@ using System.Threading.Tasks;
 
 namespace ProjectManagementApp.Models.Database
 {
-    public class ProjectManagementDbContext : DbContext
+    public class ProjectManagementDbContext : IdentityDbContext<UserEntity, RoleEntity, int, IdentityUserClaim<int>, UserRoleEntity,
+        IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         public ProjectManagementDbContext(DbContextOptions<ProjectManagementDbContext> options) : base(options)
         {

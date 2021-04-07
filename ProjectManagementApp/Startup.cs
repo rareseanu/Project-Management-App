@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ProjectManagementApp.Models.Database;
+using ProjectManagementApp.Models.Database.Entities;
 using ProjectManagementApp.Repositories;
 using ProjectManagementApp.Services;
 using System;
@@ -31,6 +33,17 @@ namespace ProjectManagementApp
         {
             services.AddDbContext<ProjectManagementDbContext>(o => o.UseSqlServer(
                 Configuration.GetConnectionString("ProjectManagementDb")));
+            services.AddIdentity<UserEntity, RoleEntity>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedPhoneNumber = false;
+
+                options.Password.RequiredLength = 8;
+                options.Password.RequireUppercase = true;
+            })
+                .AddEntityFrameworkStores<ProjectManagementDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddScoped<ItemListEntityRepository>();
             services.AddScoped<ItemListEntityService>();
