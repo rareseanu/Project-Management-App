@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjectManagementApp.Models.Database;
 using ProjectManagementApp.Models.Database.Entities;
@@ -32,19 +33,20 @@ namespace ProjectManagementApp.Controllers
         {
             return Ok(await _itemListEntityService.GetById(listId));
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<ObjectResult> UpdateList([FromBody] ItemListEntity list)
         {
             return Ok(await _itemListEntityService.Update(list));
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{itemListId}")]
         public async Task<ObjectResult> DeleteList([FromRoute] int listId)
         {
             return Ok(await _itemListEntityService.Delete(listId));
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ObjectResult> CreateList([FromBody] ItemListEntity list)
         {

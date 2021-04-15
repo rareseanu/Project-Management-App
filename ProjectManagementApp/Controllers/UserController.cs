@@ -32,5 +32,17 @@ namespace ProjectManagementApp.Controllers
         {
             return Ok(await userService.Login(userRequest.Username, userRequest.Password));
         }
+
+        [HttpPut("token/refresh")]
+        public async Task<ObjectResult> RefreshToken([FromBody] RefreshTokenRequest refreshTokenRequest)
+        {
+            return Ok(await userService.RefreshToken(refreshTokenRequest.RefreshToken));
+        }
+
+        [HttpPut("token/revoke")]
+        public async Task<ObjectResult> RevokeToken([FromBody] RefreshTokenRequest refreshTokenRequest)
+        {
+            return Ok(await userService.RevokeRefreshToken(refreshTokenRequest.RefreshToken));
+        }
     }
 }
