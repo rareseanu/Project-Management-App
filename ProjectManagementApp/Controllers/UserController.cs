@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using ProjectManagementApp.Helpers;
 using ProjectManagementApp.Models.Requests;
 using ProjectManagementApp.Services;
 using System;
@@ -19,8 +21,15 @@ namespace ProjectManagementApp.Controllers
             this.userService = userService;
         }
 
+        [Authorize]
+        [HttpGet]
+        public async Task<ObjectResult> GetUserDetails()
+        {
+            return Ok(await userService.GetUserDetails(User.GetUserId()));
+        }
+
         // To-Do: Remove role from querry for security purposes.
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public async Task<ObjectResult> Register([FromBody] UserRegisterRequest userRequest,
             [FromQuery] string role)
         {
@@ -33,13 +42,13 @@ namespace ProjectManagementApp.Controllers
             return Ok(await userService.Login(userRequest.Username, userRequest.Password));
         }
 
-        [HttpPut("token/refresh")]
+        [HttpPut("Token/Refresh")]
         public async Task<ObjectResult> RefreshToken([FromBody] RefreshTokenRequest refreshTokenRequest)
         {
             return Ok(await userService.RefreshToken(refreshTokenRequest.RefreshToken));
         }
 
-        [HttpPut("token/revoke")]
+        [HttpPut("Token/Revoke")]
         public async Task<ObjectResult> RevokeToken([FromBody] RefreshTokenRequest refreshTokenRequest)
         {
             return Ok(await userService.RevokeRefreshToken(refreshTokenRequest.RefreshToken));

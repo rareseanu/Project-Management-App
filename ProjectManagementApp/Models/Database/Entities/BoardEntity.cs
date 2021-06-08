@@ -8,14 +8,10 @@ using System.Threading.Tasks;
 namespace ProjectManagementApp.Models.Database.Entities
 {
     [Table("board")]
-    public class BoardEntity
+    public class BoardEntity : BaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
         public string Title { get; set; }
-        public List<ItemListEntity>? ItemListEntities { get; set; }
-        
+        public List<ItemListEntity>? ItemListEntities { get; set; }        
         public enum VisibilityType
         {
             PUBLIC,

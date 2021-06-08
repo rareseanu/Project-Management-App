@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using ProjectManagementApp.Models.Database;
 using ProjectManagementApp.Models.Database.Entities;
 using ProjectManagementApp.Repositories;
@@ -28,6 +30,8 @@ namespace ProjectManagementApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
+
             services.AddDbContext<ProjectManagementDbContext>(o => o.UseSqlServer(
                 Configuration.GetConnectionString("ProjectManagementDb")));
             services.AddIdentity<UserEntity, RoleEntity>(options =>
@@ -37,10 +41,17 @@ namespace ProjectManagementApp
                 options.SignIn.RequireConfirmedPhoneNumber = false;
 
                 options.Password.RequiredLength = 8;
-                options.Password.RequireUppercase = true;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
             })
                 .AddEntityFrameworkStores<ProjectManagementDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddScoped<ItemListEntityRepository>();
+            services.AddScoped<ItemListEntityService>();
+            services.AddScoped<UserRepository>();
+            services.AddScoped<UserService>();
+            services.AddControllers();
 
             services.AddAuthorization()
                 .AddAuthentication(o =>
@@ -62,9 +73,13 @@ namespace ProjectManagementApp
                     };
                 });
 
-            services.AddScoped<ItemListEntityRepository>();
-            services.AddScoped<ItemListEntityService>();
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(x =>
+                x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Project Management App", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,11 +90,16 @@ namespace ProjectManagementApp
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Project Management App"));
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

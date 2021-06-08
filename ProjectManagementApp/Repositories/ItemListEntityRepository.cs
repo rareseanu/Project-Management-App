@@ -8,59 +8,21 @@ using ProjectManagementApp.Models.Database.Entities;
 
 namespace ProjectManagementApp.Repositories
 {
-    public class ItemListEntityRepository
+    public class ItemListEntityRepository : BaseRepository<ItemListEntity>
     {
-        private readonly ProjectManagementDbContext _dbContext;
 
-        public ItemListEntityRepository(ProjectManagementDbContext dbContext)
+        public ItemListEntityRepository(ProjectManagementDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
+           
         }
-
         public async Task<List<ItemListEntity>> Search(string text)
         {
-            return await _dbContext.ItemLists
-                .Where(p => p.Title.Contains(text))
-                .ToListAsync();
+            return await GetAll(p => p.Title.Contains(text));
         }
-
-        public async Task<bool> Delete(int id)
-        {
-            var list = await GetById(id);
-
-            if (list != null)
-            {
-                _dbContext.ItemLists.Remove(list);
-                await _dbContext.SaveChangesAsync();
-                return true;
-            }
-
-            return false;
-        }
-
-        public async Task<List<ItemListEntity>> GetAll()
-        {
-            return await _dbContext.ItemLists.ToListAsync();
-        }
-
         public async Task<ItemListEntity> GetById(int id)
         {
-            var result = await _dbContext.ItemLists.FirstOrDefaultAsync(p => p.Id == id);
+            var result = await Get(p => p.Id == id);
             return result;
-        }
-
-        public async Task<ItemListEntity> Update(ItemListEntity list)
-        {
-            var result = _dbContext.ItemLists.Update(list);
-            await _dbContext.SaveChangesAsync();
-            return result.Entity;
-        }
-
-        public async Task<ItemListEntity> Insert(ItemListEntity list)
-        {
-            EntityEntry<ItemListEntity> result = await _dbContext.ItemLists.AddAsync(list);
-            await _dbContext.SaveChangesAsync();
-            return result.Entity;
         }
     }
 }

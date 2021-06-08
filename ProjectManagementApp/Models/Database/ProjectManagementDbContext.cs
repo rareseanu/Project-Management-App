@@ -22,6 +22,17 @@ namespace ProjectManagementApp.Models.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<UserEntity>()
+                .HasMany(e => e.UserRoles)
+                .WithOne(e => e.User)
+                .HasForeignKey(ur => ur.UserId)
+                .IsRequired();
+
+            modelBuilder.Entity<RoleEntity>()
+                .HasMany(e => e.UserRoles)
+                .WithOne(e => e.Role)
+                .HasForeignKey(ur => ur.RoleId)
+                .IsRequired();
         }
     }
 }

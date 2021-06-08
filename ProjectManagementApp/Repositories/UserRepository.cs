@@ -21,7 +21,14 @@ namespace ProjectManagementApp.Repositories
             this.roleManager = roleManager;
             this.signInManager = signInManager;
         }
-
+        public async Task<UserEntity> GetUserById(int userId)
+        {
+            return await userManager.Users
+                .Where(p => p.Id == userId)
+                .Include(p => p.UserRoles)
+                .ThenInclude(p => p.Role)
+                .FirstOrDefaultAsync();
+        }
         public async Task<UserEntity> GetUserByUsername(string userName)
         {
             return await userManager.Users
@@ -54,7 +61,6 @@ namespace ProjectManagementApp.Repositories
         {
             return await userManager.AddToRoleAsync(user, role);
         }
-
         public async Task<UserEntity> UpdateUser(UserEntity user)
         {
             await userManager.UpdateAsync(user);

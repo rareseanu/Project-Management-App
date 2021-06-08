@@ -15,42 +15,41 @@ namespace ProjectManagementApp.Controllers
     [Route("api/itemList")]
     public class ListEntityController : ControllerBase
     {
-        private readonly ItemListEntityService _itemListEntityService;
+        private readonly ItemListEntityService itemListEntityService;
 
         public ListEntityController(ItemListEntityService listEntityService)
         {
-            _itemListEntityService = listEntityService;
+            itemListEntityService = listEntityService;
         }
 
         [HttpGet]
         public async Task<ObjectResult> GetAll()
         {
-            return Ok(await _itemListEntityService.GetAll());
+            return Ok(await itemListEntityService.GetAll());
         }
 
         [HttpGet("{itemListId}")]
         public async Task<ObjectResult> GetById([FromRoute] int listId)
         {
-            return Ok(await _itemListEntityService.GetById(listId));
+            return Ok(await itemListEntityService.GetById(listId));
         }
-        [Authorize(Roles = "Admin")]
+
         [HttpPut]
         public async Task<ObjectResult> UpdateList([FromBody] ItemListEntity list)
         {
-            return Ok(await _itemListEntityService.Update(list));
+            return Ok(await itemListEntityService.Update(list));
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpDelete("{itemListId}")]
-        public async Task<ObjectResult> DeleteList([FromRoute] int listId)
+        public async Task<ObjectResult> DeleteList([FromBody] ItemListEntity list)
         {
-            return Ok(await _itemListEntityService.Delete(listId));
+            return Ok(await itemListEntityService.Delete(list));
         }
-        [Authorize(Roles = "Admin")]
+
         [HttpPost]
         public async Task<ObjectResult> CreateList([FromBody] ItemListEntity list)
         {
-            return Ok(await _itemListEntityService.CreateList(list));
+            return Ok(await itemListEntityService.Create(list));
         }
     }
 }

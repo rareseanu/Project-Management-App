@@ -8,11 +8,8 @@ using System.Threading.Tasks;
 namespace ProjectManagementApp.Models.Database.Entities
 {
     [Table("itemlist")]
-    public class ItemListEntity
+    public class ItemListEntity : BaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
         public string Title { get; set; } 
         public List<ItemEntity>? ItemEntities { get; set; }
 

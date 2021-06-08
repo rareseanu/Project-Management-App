@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using ProjectManagementApp.Models.Responses;
 using ProjectManagementApp.Models.Database.Entities;
 using ProjectManagementApp.Models.Requests;
+using ProjectManagementApp.Models.Responses;
 using ProjectManagementApp.Repositories;
 using System;
 using System.Collections.Generic;
@@ -18,13 +18,16 @@ namespace ProjectManagementApp.Services
     public class UserService
     {
         private readonly UserRepository userRepository;
-        private readonly string _tokenKey = @"hfwehdfuhf0jf-23jd9-83u9830ffjn4jffkerfj4j32f9043jfjifjrefjre";
 
+        private readonly string tokenKey = @"hfwehdfuhf0jf-23jd9-83u9830ffjn4jffkerfj4j32f9043jfjifjrefjre";
         public UserService(UserRepository userRepository)
         {
             this.userRepository = userRepository;
         }
-
+        public async Task<UserEntity> GetUserDetails(int userId)
+        {
+            return await userRepository.GetUserById(userId);
+        }
         public async Task<IdentityResult> RegisterUser(UserRegisterRequest userRequest, string role)
         {
             var user = new UserEntity
@@ -117,13 +120,13 @@ namespace ProjectManagementApp.Services
             claims.AddRange(user.UserRoles.Select(p => p.Role.Name).Select(p => new Claim(ClaimTypes.Role, p)));
 
             var token = new JwtSecurityToken(
-                "https://trellov2.ro",
-                "https://trellov2.ro",
+                "https://projectmanagement.ro",
+                "https://projectmanagement.ro",
                 claims,
                 DateTime.Now,
                 DateTime.Now.AddMinutes(5d),
                 new SigningCredentials(
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenKey)),
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey)),
                     SecurityAlgorithms.HmacSha256));
 
             return new JwtSecurityTokenHandler().WriteToken(token);

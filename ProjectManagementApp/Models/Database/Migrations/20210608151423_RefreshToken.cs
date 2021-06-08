@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ProjectManagementApp.Models.Database.Migrations
 {
-    public partial class AddTokenFields : Migration
+    public partial class RefreshToken : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

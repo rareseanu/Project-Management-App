@@ -1,4 +1,4 @@
-﻿namespace ProjectManagementApp.Models.Requests
+namespace ProjectManagementApp.Models.Requests
 {
     public class RefreshTokenRequest
     {
