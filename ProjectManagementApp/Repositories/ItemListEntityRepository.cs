@@ -10,19 +10,18 @@ namespace ProjectManagementApp.Repositories
 {
     public class ItemListEntityRepository : BaseRepository<ItemListEntity>
     {
-
         public ItemListEntityRepository(ProjectManagementDbContext dbContext) : base(dbContext)
         {
-           
+
         }
         public async Task<List<ItemListEntity>> Search(string text)
         {
             return await GetAll(p => p.Title.Contains(text));
         }
-        public async Task<ItemListEntity> GetById(int id)
+        public ItemListEntity GetById(int id)
         {
-            var result = await Get(p => p.Id == id);
-            return result;
+            var result = Get(p => p.Id == id);
+            return result.FirstOrDefault();
         }
     }
 }

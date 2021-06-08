@@ -7,16 +7,35 @@ using Microsoft.EntityFrameworkCore;
 using ProjectManagementApp.Models.Database.Entities;
 using ProjectManagementApp.Repositories;
 using Microsoft.AspNetCore.Http;
+using ProjectManagementApp.Models.Responses.ItemList;
+using ProjectManagementApp.Models.Requests;
+using AutoMapper;
 
 namespace ProjectManagementApp.Services
 {
     public class ItemListEntityService : BaseService<ItemListEntity>
     {
         private readonly ItemListEntityRepository itemListEntityRepository;
+        private readonly BasePaginationRequest pagination;
+        private readonly IMapper mapper;
 
-        public ItemListEntityService(ItemListEntityRepository listEntityRepository, IHttpContextAccessor contextAccessor) : base(listEntityRepository, contextAccessor)
+        public ItemListEntityService(ItemListEntityRepository listEntityRepository,
+            IHttpContextAccessor contextAccessor,
+            IMapper mapper) : base(listEntityRepository, contextAccessor)
         {
-           
+            itemListEntityRepository = listEntityRepository;
+            pagination = (BasePaginationRequest)contextAccessor.HttpContext.Items["pagination"];
+            this.mapper = mapper;
+        }
+
+        public async Task<List<ItemListDetailResponse>> GetLists(int userId)
+        {
+            var result = await Get(p => p.Id == userId)
+                .Skip(pagination.Size * (pagination.Page - 1))
+                .Take(pagination.Size)
+                .ToListAsync();
+
+            return mapper.Map<List<ItemListDetailResponse>>(result);
         }
 
         public async Task<List<ItemListEntity>> Search(string text)
@@ -24,9 +43,9 @@ namespace ProjectManagementApp.Services
             return await itemListEntityRepository.Search(text);
         }
 
-        public async Task<ItemListEntity> GetById(int id)
+        public ItemListEntity GetById(int id)
         {
-            return await itemListEntityRepository.GetById(id);
+            return itemListEntityRepository.GetById(id);
         }
     }
 }

@@ -23,9 +23,9 @@ namespace ProjectManagementApp.Services
             CurrentUser = contextAccessor.HttpContext?.User;
         }
 
-        public async Task<T> Get(Expression<Func<T, bool>> predicate = null)
+        public IQueryable<T> Get(Expression<Func<T, bool>> predicate = null)
         {
-            return await BaseRepository.Get(predicate);
+            return BaseRepository.Get(predicate);
         }
 
         public async Task<List<T>> GetAll(Expression<Func<T, bool>> predicate = null)

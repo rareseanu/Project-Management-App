@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ProjectManagementApp.Models.Database.Entities;
 using ProjectManagementApp.Models.Requests;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -24,9 +26,17 @@ namespace ProjectManagementApp.Services
         {
             this.userRepository = userRepository;
         }
+
+        public IQueryable<UserEntity> Get(Expression<Func<UserEntity, bool>> predicate = null)
+        {
+            return userRepository.Get(predicate);
+        }
         public async Task<UserEntity> GetUserDetails(int userId)
         {
-            return await userRepository.GetUserById(userId);
+            return await Get(p => p.Id == userId)
+                .Include(p => p.UserRoles)
+                .ThenInclude(p => p.Role)
+                .FirstOrDefaultAsync();
         }
         public async Task<IdentityResult> RegisterUser(UserRegisterRequest userRequest, string role)
         {

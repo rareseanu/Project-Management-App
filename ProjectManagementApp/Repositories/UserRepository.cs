@@ -4,6 +4,7 @@ using ProjectManagementApp.Models.Database.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace ProjectManagementApp.Repositories
@@ -21,13 +22,13 @@ namespace ProjectManagementApp.Repositories
             this.roleManager = roleManager;
             this.signInManager = signInManager;
         }
-        public async Task<UserEntity> GetUserById(int userId)
+        public IQueryable<UserEntity> Get(Expression<Func<UserEntity, bool>> predicate = null)
         {
-            return await userManager.Users
-                .Where(p => p.Id == userId)
-                .Include(p => p.UserRoles)
-                .ThenInclude(p => p.Role)
-                .FirstOrDefaultAsync();
+            if (predicate != null)
+                return userManager.Users
+                    .Where(predicate);
+
+            return userManager.Users;
         }
         public async Task<UserEntity> GetUserByUsername(string userName)
         {

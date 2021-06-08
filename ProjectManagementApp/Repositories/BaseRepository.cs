@@ -20,14 +20,12 @@ namespace ProjectManagementApp.Repositories
             table = dbContext.Set<T>();
         }
 
-        public async Task<T> Get(Expression<Func<T, bool>> predicate = null)
+        public IQueryable<T> Get(Expression<Func<T, bool>> predicate = null)
         {
             if (predicate != null)
-                return await table
-                    .Where(predicate)
-                    .FirstOrDefaultAsync();
+                return table.Where(predicate);
 
-            return await table.FirstOrDefaultAsync();
+            return table;
         }
 
         public async Task<List<T>> GetAll(Expression<Func<T, bool>> predicate = null)

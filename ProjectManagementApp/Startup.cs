@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +10,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using ProjectManagementApp.Filters;
+using ProjectManagementApp.Helpers;
 using ProjectManagementApp.Models.Database;
 using ProjectManagementApp.Models.Database.Entities;
 using ProjectManagementApp.Repositories;
@@ -73,8 +76,12 @@ namespace ProjectManagementApp
                     };
                 });
 
+            services.AddSingleton(new MapperConfiguration(p => p.AddProfile(new MappingProfile())).CreateMapper());
+
             services.AddControllers().AddNewtonsoftJson(x =>
                 x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+
+            services.AddMvcCore(o => o.Filters.Add(new TokenAuthorizationFilter()));
 
             services.AddSwaggerGen(c =>
             {

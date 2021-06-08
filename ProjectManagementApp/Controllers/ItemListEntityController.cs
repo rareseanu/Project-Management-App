@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProjectManagementApp.Filters;
 using ProjectManagementApp.Models.Database;
 using ProjectManagementApp.Models.Database.Entities;
 using ProjectManagementApp.Repositories;
 using ProjectManagementApp.Services;
+using ProjectManagementApp.Helpers;
 
 namespace ProjectManagementApp.Controllers
 {
@@ -22,16 +24,17 @@ namespace ProjectManagementApp.Controllers
             itemListEntityService = listEntityService;
         }
 
+        [PaginationResourceFilter]
         [HttpGet]
         public async Task<ObjectResult> GetAll()
         {
-            return Ok(await itemListEntityService.GetAll());
+            return Ok(await itemListEntityService.GetLists(User.GetUserId()));
         }
 
         [HttpGet("{itemListId}")]
-        public async Task<ObjectResult> GetById([FromRoute] int listId)
+        public ObjectResult GetById([FromRoute] int listId)
         {
-            return Ok(await itemListEntityService.GetById(listId));
+            return Ok(itemListEntityService.GetById(listId));
         }
 
         [HttpPut]
