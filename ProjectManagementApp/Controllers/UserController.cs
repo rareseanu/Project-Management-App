@@ -28,7 +28,6 @@ namespace ProjectManagementApp.Controllers
             return Ok(await userService.GetUserDetails(User.GetUserId()));
         }
 
-        // To-Do: Remove role from querry for security purposes.
         [HttpPost("Register")]
         public async Task<ObjectResult> Register([FromBody] UserRegisterRequest userRequest,
             [FromQuery] string role)
@@ -52,6 +51,18 @@ namespace ProjectManagementApp.Controllers
         public async Task<ObjectResult> RevokeToken([FromBody] RefreshTokenRequest refreshTokenRequest)
         {
             return Ok(await userService.RevokeRefreshToken(refreshTokenRequest.RefreshToken));
+        }
+
+        [HttpPost("Register/ResendEmail/{email}")]
+        public async Task<ObjectResult> ResendEmail([FromRoute] string email)
+        {
+            return Ok(await userService.ResendEmailConfirmation(email));
+        }
+
+        [HttpPut("Register/ConfirmEmail")]
+        public async Task<ObjectResult> ConfirmEmail([FromQuery] string email, [FromQuery] string code)
+        {
+            return Ok(await userService.ConfirmEmail(email, code));
         }
     }
 }

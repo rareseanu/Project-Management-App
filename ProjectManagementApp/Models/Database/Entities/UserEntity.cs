@@ -15,5 +15,7 @@ namespace ProjectManagementApp.Models.Database.Entities
         public string RefreshToken { get; set; }
         public DateTime? RefreshTokenExpires { get; set; }
         public List<UserRoleEntity> UserRoles { get; set; }
+        public string ConfirmationCode { get; set; }
+        public DateTime? ConfirmationCodeExpires { get; set; }
     }
 }

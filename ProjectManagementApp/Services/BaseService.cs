@@ -46,9 +46,12 @@ namespace ProjectManagementApp.Services
         public async Task<T> Create(T entity, bool commit = true)
         {
             if (CurrentUser != null && CurrentUser.GetUserId() != 0)
+            {
                 entity.CreatedBy = entity.ModifiedBy = CurrentUser.GetUserId();
 
-            return await BaseRepository.Create(entity, commit);
+                return await BaseRepository.Create(entity, commit);
+            }
+            return null;
         }
 
         public async Task<T> Update(T entity, bool commit = true)
@@ -57,9 +60,9 @@ namespace ProjectManagementApp.Services
             {
                 entity.ModifiedBy = CurrentUser.GetUserId();
                 entity.DateModified = DateTime.Now;
+                return await BaseRepository.Update(entity, commit);
             }
-
-            return await BaseRepository.Update(entity, commit);
+            return null;
         }
 
         public async Task<T> Delete(T entity, bool commit = true)

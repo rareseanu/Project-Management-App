@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using ProjectManagementApp.Filters;
 using ProjectManagementApp.Helpers;
 using ProjectManagementApp.Middlewares;
+using ProjectManagementApp.Models;
 using ProjectManagementApp.Models.Database;
 using ProjectManagementApp.Models.Database.Entities;
 using ProjectManagementApp.Repositories;
@@ -81,6 +82,9 @@ namespace ProjectManagementApp
             services.AddSingleton(new MapperConfiguration(p => p.AddProfile(new MappingProfile())).CreateMapper());
             services.AddControllers().AddNewtonsoftJson(x =>
                 x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+
+            services.AddScoped<EmailService>();
+            services.AddSingleton(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
 
             services.AddMvcCore(o => o.Filters.Add(new TokenAuthorizationFilter()));
 

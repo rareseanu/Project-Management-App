@@ -22,6 +22,8 @@ namespace ProjectManagementApp.Models.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<BaseEntity>().HasQueryFilter(p => p.IsDeleted == false);
             modelBuilder.Entity<UserEntity>()
                 .HasMany(e => e.UserRoles)
                 .WithOne(e => e.User)

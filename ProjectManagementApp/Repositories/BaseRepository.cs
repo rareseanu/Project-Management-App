@@ -75,7 +75,9 @@ namespace ProjectManagementApp.Repositories
 
         public async Task<T> Delete(T entity, bool commit = true)
         {
-            table.Remove(entity);
+            // Soft delete
+            entity.IsDeleted = true;
+            table.Update(entity);
 
             if (commit)
                 await Commit();

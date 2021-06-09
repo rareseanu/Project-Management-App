@@ -67,5 +67,10 @@ namespace ProjectManagementApp.Repositories
             await userManager.UpdateAsync(user);
             return user;
         }
+        public async Task<IdentityResult> ConfirmEmail(UserEntity user)
+        {
+            return await userManager.ConfirmEmailAsync(user,
+                await userManager.GenerateEmailConfirmationTokenAsync(user));
+        }
     }
 }
