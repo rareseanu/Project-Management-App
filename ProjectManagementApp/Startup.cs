@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using ProjectManagementApp.Filters;
 using ProjectManagementApp.Helpers;
+using ProjectManagementApp.Middlewares;
 using ProjectManagementApp.Models.Database;
 using ProjectManagementApp.Models.Database.Entities;
 using ProjectManagementApp.Repositories;
@@ -76,8 +77,8 @@ namespace ProjectManagementApp
                     };
                 });
 
+            services.AddHostedService<SeedDatabaseHostedService>();
             services.AddSingleton(new MapperConfiguration(p => p.AddProfile(new MappingProfile())).CreateMapper());
-
             services.AddControllers().AddNewtonsoftJson(x =>
                 x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
@@ -96,6 +97,8 @@ namespace ProjectManagementApp
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseSwagger();
 
