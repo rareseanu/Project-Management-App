@@ -16,9 +16,14 @@ namespace ProjectManagementApp.Models.Database
         {
         }
 
+        //labels
         public DbSet<ItemEntity> Items { get; set; }
         public DbSet<ItemListEntity> ItemLists { get; set; }
         public DbSet<BoardEntity> Boards { get; set; }
+        public DbSet<BoardUserEntity> BoardUsers { get; set; }
+        public DbSet<CheckItemEntity> CheckItems { get; set; }
+        public DbSet<CheckListEntity> CheckLists { get; set; }
+        public DbSet<CommentaryEntity> Commentaries { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

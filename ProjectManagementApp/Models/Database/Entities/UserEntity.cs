@@ -17,5 +17,7 @@ namespace ProjectManagementApp.Models.Database.Entities
         public List<UserRoleEntity> UserRoles { get; set; }
         public string ConfirmationCode { get; set; }
         public DateTime? ConfirmationCodeExpires { get; set; }
+        public List<BoardUserEntity> BoardList { get; set; }
+        public List<CommentaryEntity> CommentaryList { get; set; }
     }
 }

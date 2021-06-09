@@ -57,7 +57,6 @@ namespace ProjectManagementApp.Services
                     {
                         Name = role
                     });
-
                 }
             }
         }

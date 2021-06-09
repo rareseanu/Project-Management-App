@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 
 namespace ProjectManagementApp.Models.Database.Entities
 {
-    [Table("items")]
     public class ItemEntity : BaseEntity
     {
         public string Title { get; set; }
         public string? Description { get; set; }
-
+        public List<CheckListEntity> CheckLists { get; set; }
+        public List<CommentaryEntity> CommentaryList { get; set; }
+        public int ItemListEntityId { get; set; }
+        public ItemListEntity ItemListEntity { get; set; }
     }
 }

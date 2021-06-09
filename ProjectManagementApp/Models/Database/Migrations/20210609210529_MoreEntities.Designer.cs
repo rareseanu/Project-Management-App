@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectManagementApp.Models.Database;
 
 namespace ProjectManagementApp.Models.Database.Migrations
 {
     [DbContext(typeof(ProjectManagementDbContext))]
-    partial class ProjectManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210609210529_MoreEntities")]
+    partial class MoreEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,7 +137,7 @@ namespace ProjectManagementApp.Models.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Boards");
+                    b.ToTable("board");
                 });
 
             modelBuilder.Entity("ProjectManagementApp.Models.Database.Entities.BoardUserEntity", b =>
@@ -302,7 +304,7 @@ namespace ProjectManagementApp.Models.Database.Migrations
 
                     b.HasIndex("ItemListEntityId");
 
-                    b.ToTable("Items");
+                    b.ToTable("items");
                 });
 
             modelBuilder.Entity("ProjectManagementApp.Models.Database.Entities.ItemListEntity", b =>
@@ -337,7 +339,7 @@ namespace ProjectManagementApp.Models.Database.Migrations
 
                     b.HasIndex("BoardEntityId");
 
-                    b.ToTable("ItemLists");
+                    b.ToTable("itemlist");
                 });
 
             modelBuilder.Entity("ProjectManagementApp.Models.Database.Entities.RoleEntity", b =>
@@ -382,12 +384,6 @@ namespace ProjectManagementApp.Models.Database.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ConfirmationCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ConfirmationCodeExpires")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");

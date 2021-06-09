@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace ProjectManagementApp.Models.Database.Entities
 {
-    [Table("board")]
     public class BoardEntity : BaseEntity
     {
         public string Title { get; set; }
-        public List<ItemListEntity>? ItemListEntities { get; set; }        
+        public List<ItemListEntity> ItemListEntities { get; set; }        
         public enum VisibilityType
         {
             PUBLIC,
             PRIVATE
         }
         public VisibilityType Visibility { get; set; }
+        public List<BoardUserEntity> UserList { get; set; }
     }
 }
