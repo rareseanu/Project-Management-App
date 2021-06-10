@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,14 +15,35 @@ namespace ProjectManagementApp
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var logger = NLogBuilder.ConfigureNLog("./nlog.config").GetCurrentClassLogger();
+            try
+            {
+                CreateHostBuilder(args).Build().Run();
+            } catch (Exception ex)
+            {
+                logger.Error(ex, "Server shutdown.");
+                throw ex;
+            } finally
+            {
+                LogManager.Shutdown();
+            }
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+
+                    webBuilder.ConfigureLogging(logging =>
+                    {
+                        logging.ClearProviders();
+                        logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Warning);
+                    });
+
+                    webBuilder.UseNLog();
                 });
+        }
     }
 }

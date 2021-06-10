@@ -18,6 +18,8 @@ using ProjectManagementApp.Models.Database;
 using ProjectManagementApp.Models.Database.Entities;
 using ProjectManagementApp.Repositories;
 using ProjectManagementApp.Services;
+using Serilog;
+using Serilog.Events;
 using System;
 using System.Text;
 
@@ -92,6 +94,14 @@ namespace ProjectManagementApp
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Project Management App", Version = "v1" });
             });
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.WithProperty("Application", "ProjectManagementApp")
+                .Enrich.FromLogContext()
+                .WriteTo.Seq("http://localhost:44334")
+                .CreateLogger();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
