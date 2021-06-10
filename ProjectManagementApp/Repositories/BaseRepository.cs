@@ -28,14 +28,13 @@ namespace ProjectManagementApp.Repositories
             return table;
         }
 
-        public async Task<List<T>> GetAll(Expression<Func<T, bool>> predicate = null)
+        public IQueryable<T> GetAll(Expression<Func<T, bool>> predicate = null)
         {
             if (predicate != null)
-                return await table
-                    .Where(predicate)
-                    .ToListAsync();
+                return table
+                    .Where(predicate);
 
-            return await table.ToListAsync();
+            return table;
         }
 
         public async Task<int> CountAll(Expression<Func<T, bool>> predicate = null)

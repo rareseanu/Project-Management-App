@@ -22,7 +22,6 @@ namespace ProjectManagementApp
             } catch (Exception ex)
             {
                 logger.Error(ex, "Server shutdown.");
-                throw ex;
             } finally
             {
                 LogManager.Shutdown();

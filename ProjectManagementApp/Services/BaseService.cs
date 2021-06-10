@@ -28,9 +28,9 @@ namespace ProjectManagementApp.Services
             return BaseRepository.Get(predicate);
         }
 
-        public async Task<List<T>> GetAll(Expression<Func<T, bool>> predicate = null)
+        public IQueryable<T> GetAll(Expression<Func<T, bool>> predicate = null)
         {
-            return await BaseRepository.GetAll(predicate);
+            return BaseRepository.GetAll(predicate);
         }
 
         public async Task<int> CountAll(Expression<Func<T, bool>> predicate = null)
@@ -43,7 +43,7 @@ namespace ProjectManagementApp.Services
             await BaseRepository.Commit();
         }
 
-        public async Task<T> Create(T entity, bool commit = true)
+        public virtual async Task<T> Create(T entity, bool commit = true)
         {
             if (CurrentUser != null && CurrentUser.GetUserId() != 0)
             {
@@ -54,7 +54,7 @@ namespace ProjectManagementApp.Services
             return null;
         }
 
-        public async Task<T> Update(T entity, bool commit = true)
+        public virtual async Task<T> Update(T entity, bool commit = true)
         {
             if (CurrentUser != null && CurrentUser.GetUserId() != 0)
             {
@@ -65,7 +65,7 @@ namespace ProjectManagementApp.Services
             return null;
         }
 
-        public async Task<T> Delete(T entity, bool commit = true)
+        public virtual async Task<T> Delete(T entity, bool commit = true)
         {
             return await BaseRepository.Delete(entity, commit);
         }

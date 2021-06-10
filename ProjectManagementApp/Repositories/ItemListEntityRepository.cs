@@ -16,7 +16,7 @@ namespace ProjectManagementApp.Repositories
         }
         public async Task<List<ItemListEntity>> Search(string text)
         {
-            return await GetAll(p => p.Title.Contains(text));
+            return await GetAll(p => p.Title.Contains(text)).ToListAsync();
         }
         public ItemListEntity GetById(int id)
         {

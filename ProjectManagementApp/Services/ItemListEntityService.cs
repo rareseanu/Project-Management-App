@@ -30,7 +30,7 @@ namespace ProjectManagementApp.Services
 
         public async Task<List<ItemListDetailResponse>> GetLists(int userId)
         {
-            var result = await Get(p => p.Id == userId)
+            var result = await Get(p => p.CreatedBy == userId)
                 .Skip(pagination.Size * (pagination.Page - 1))
                 .Take(pagination.Size)
                 .ToListAsync();

@@ -55,6 +55,9 @@ namespace ProjectManagementApp
                 .AddDefaultTokenProviders();
 
             services.AddScoped<ItemListEntityRepository>();
+            services.AddScoped<BoardEntityRepository>();
+            services.AddScoped<BoardEntityService>();
+            services.AddScoped<BoardUserEntityRepository>();
             services.AddScoped<ItemListEntityService>();
             services.AddScoped<UserRepository>();
             services.AddScoped<UserService>();

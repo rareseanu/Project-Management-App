@@ -19,6 +19,17 @@ namespace ProjectManagementApp.Helpers
             return userId.ToInt();
         }
 
+        public static string GetUserRole(this ClaimsPrincipal principal)
+        {
+            var role = principal.Claims
+                .FirstOrDefault(p => p.Type == ClaimTypes.Role)?.Value;
+
+            if (role == null)
+                return null;
+
+            return role;
+        }
+
         public static int ToInt(this string obj)
         {
             return int.Parse(obj);
