@@ -28,7 +28,7 @@ namespace ProjectManagementApp.Services
             this.mapper = mapper;
         }
 
-        public async Task<List<ItemListDetailResponse>> GetLists(int userId)
+        public async Task<List<ItemListDetailResponse>> GetItemLists(int userId)
         {
             var result = await Get(p => p.CreatedBy == userId)
                 .Skip(pagination.Size * (pagination.Page - 1))
@@ -37,15 +37,13 @@ namespace ProjectManagementApp.Services
 
             return mapper.Map<List<ItemListDetailResponse>>(result);
         }
-
-        public async Task<List<ItemListEntity>> Search(string text)
+        public async Task<ItemListEntity> GetItemList(int itemListId)
         {
-            return await itemListEntityRepository.Search(text);
+            return await itemListEntityRepository.GetAll(p => p.Id == itemListId).Include(p => p.BoardEntity).Include(p => p.ItemEntities).FirstOrDefaultAsync();
         }
-
-        public ItemListEntity GetById(int id)
+        public async Task<List<ItemListEntity>> GetItemLists()
         {
-            return itemListEntityRepository.GetById(id);
+            return await itemListEntityRepository.GetAll().Include(p => p.BoardEntity).Include(p => p.ItemEntities).ToListAsync();
         }
     }
 }

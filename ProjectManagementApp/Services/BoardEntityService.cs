@@ -23,12 +23,6 @@ namespace ProjectManagementApp.Services
             this.boardEntityRepository = boardEntityRepository;
             this.boardUserEntityRepository = boardUserEntityRepository;
         }
-
-        public BoardEntity GetById(int id)
-        {
-            return boardEntityRepository.GetById(id);
-        }
-
         public override Task<BoardEntity> Delete(BoardEntity entity, bool commit = true)
         {
             var userPermission = boardUserEntityRepository.Get(p => p.UserEntityId == CurrentUser.GetUserId()).FirstOrDefault()?.BoardRole;
@@ -57,6 +51,11 @@ namespace ProjectManagementApp.Services
             return board;
         }
 
+        public async Task<BoardEntity> GetBoard(int boardId)
+        {
+            return await boardEntityRepository.GetAll(p => p.Id == boardId).Include(p => p.UserList).FirstOrDefaultAsync();
+        }
+
         public async Task<List<BoardEntity>> GetBoards(int userId)
         {
             var boards = boardEntityRepository.GetAll()
@@ -70,6 +69,14 @@ namespace ProjectManagementApp.Services
             var boards = boardEntityRepository.GetAll()
                 .Include(p => p.UserList);
             return await boards.ToListAsync();
+        }
+        public async Task<BoardUserEntity> GivePermissionToUser(BoardUserEntity boardUser)
+        {
+            return await boardUserEntityRepository.Create(boardUser);
+        }
+        public async Task<BoardUserEntity> RemovePermissionFromUser(BoardUserEntity boardUser)
+        {
+            return await boardUserEntityRepository.Delete(boardUser);
         }
     }
 }

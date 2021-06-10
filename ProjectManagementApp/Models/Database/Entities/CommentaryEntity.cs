@@ -10,6 +10,7 @@ namespace ProjectManagementApp.Models.Database.Entities
     {
         public int ItemEntityId { get; set; }
         public ItemEntity ItemEntity { get; set; }
+        public string Text { get; set; }
 
         [ForeignKey("CreatedBy")]
         public UserEntity UserEntity { get; set; }

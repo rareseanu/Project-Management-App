@@ -31,9 +31,13 @@ namespace ProjectManagementApp.Controllers
             {
                 return Ok(await boardEntityService.GetBoards(User.GetUserId()));
             }
+            else if (User.GetUserRole() == "Admin")
+            {
+                return Ok(await boardEntityService.GetBoards(userId));
+            }
             return null;
         }
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ObjectResult> GetAll()
         {
@@ -43,7 +47,7 @@ namespace ProjectManagementApp.Controllers
         [HttpGet("{boardId}")]
         public ObjectResult GetById([FromRoute] int boardId)
         {
-            return Ok(boardEntityService.GetById(boardId));
+            return Ok(boardEntityService.GetBoard(boardId));
         }
         [Authorize]
         [HttpPut]
@@ -62,6 +66,18 @@ namespace ProjectManagementApp.Controllers
         public async Task<ObjectResult> CreateBoard([FromBody] BoardEntity board)
         {
             return Ok(await boardEntityService.Create(board));
+        }
+        [Authorize]
+        [HttpPost("/api/board/users")]
+        public async Task<ObjectResult> GivePermissionToUser([FromBody] BoardUserEntity boardUser)
+        {
+            return Ok(await boardEntityService.GivePermissionToUser(boardUser));
+        }
+        [Authorize]
+        [HttpDelete("/api/board/users")]
+        public async Task<ObjectResult> RemovePermissionFromUser([FromBody] BoardUserEntity boardUser)
+        {
+            return Ok(await boardEntityService.RemovePermissionFromUser(boardUser));
         }
     }
 }

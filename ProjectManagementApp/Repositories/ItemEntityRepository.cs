@@ -8,13 +8,13 @@ using ProjectManagementApp.Models.Database.Entities;
 
 namespace ProjectManagementApp.Repositories
 {
-    public class ItemListEntityRepository : BaseRepository<ItemListEntity>
+    public class ItemEntityRepository : BaseRepository<ItemEntity>
     {
-        public ItemListEntityRepository(ProjectManagementDbContext dbContext) : base(dbContext)
+        public ItemEntityRepository(ProjectManagementDbContext dbContext) : base(dbContext)
         {
 
         }
-        public ItemListEntity GetById(int id)
+        public ItemEntity GetById(int id)
         {
             var result = Get(p => p.Id == id);
             return result.FirstOrDefault();

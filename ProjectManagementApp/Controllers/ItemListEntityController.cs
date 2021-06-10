@@ -14,45 +14,58 @@ using ProjectManagementApp.Helpers;
 namespace ProjectManagementApp.Controllers
 {
     [ApiController]
-    [Route("api/itemList")]
-    public class ListEntityController : ControllerBase
+    [Route("api/itemlist")]
+    public class ItemListEntityController : ControllerBase
     {
         private readonly ItemListEntityService itemListEntityService;
 
-        public ListEntityController(ItemListEntityService listEntityService)
+        public ItemListEntityController(ItemListEntityService itemListEntityService)
         {
-            itemListEntityService = listEntityService;
+            this.itemListEntityService = itemListEntityService;
         }
-
-        [PaginationResourceFilter]
+        [Authorize]
+        [HttpGet("/api/itemlist/user/{userId}")]
+        public async Task<ObjectResult> GetAll([FromRoute] int userId)
+        {
+            if (userId == User.GetUserId())
+            {
+                return Ok(await itemListEntityService.GetItemLists(User.GetUserId()));
+            }
+            else if (User.GetUserRole() == "Admin")
+            {
+                return Ok(await itemListEntityService.GetItemLists(userId));
+            }
+            return null;
+        }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ObjectResult> GetAll()
         {
-            return Ok(await itemListEntityService.GetLists(User.GetUserId()));
+            return Ok(await itemListEntityService.GetItemLists());
         }
-
+        [Authorize]
         [HttpGet("{itemListId}")]
-        public ObjectResult GetById([FromRoute] int listId)
+        public ObjectResult GetById([FromRoute] int itemListId)
         {
-            return Ok(itemListEntityService.GetById(listId));
+            return Ok(itemListEntityService.GetItemList(itemListId));
         }
-
+        [Authorize]
         [HttpPut]
-        public async Task<ObjectResult> UpdateList([FromBody] ItemListEntity list)
+        public async Task<ObjectResult> UpdateItemList([FromBody] ItemListEntity itemList)
         {
-            return Ok(await itemListEntityService.Update(list));
+            return Ok(await itemListEntityService.Update(itemList));
         }
-
+        [Authorize]
         [HttpDelete("{itemListId}")]
-        public async Task<ObjectResult> DeleteList([FromBody] ItemListEntity list)
+        public async Task<ObjectResult> DeleteItemList([FromBody] ItemListEntity itemList)
         {
-            return Ok(await itemListEntityService.Delete(list));
+            return Ok(await itemListEntityService.Delete(itemList));
         }
-
+        [Authorize]
         [HttpPost]
-        public async Task<ObjectResult> CreateList([FromBody] ItemListEntity list)
+        public async Task<ObjectResult> CreateItemList([FromBody] ItemListEntity itemList)
         {
-            return Ok(await itemListEntityService.Create(list));
+            return Ok(await itemListEntityService.Create(itemList));
         }
     }
 }
