@@ -15,5 +15,6 @@ namespace ProjectManagementApp.Models.Database.Entities
         public List<CommentaryEntity> CommentaryList { get; set; }
         public int ItemListEntityId { get; set; }
         public ItemListEntity ItemListEntity { get; set; }
+        public List<ItemLabelEntity> LabelList{get;set;}
     }
 }

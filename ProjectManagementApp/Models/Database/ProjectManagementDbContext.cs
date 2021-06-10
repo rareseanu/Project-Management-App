@@ -15,8 +15,6 @@ namespace ProjectManagementApp.Models.Database
         public ProjectManagementDbContext(DbContextOptions<ProjectManagementDbContext> options) : base(options)
         {
         }
-
-        //labels
         public DbSet<ItemEntity> Items { get; set; }
         public DbSet<ItemListEntity> ItemLists { get; set; }
         public DbSet<BoardEntity> Boards { get; set; }
@@ -24,11 +22,21 @@ namespace ProjectManagementApp.Models.Database
         public DbSet<CheckItemEntity> CheckItems { get; set; }
         public DbSet<CheckListEntity> CheckLists { get; set; }
         public DbSet<CommentaryEntity> Commentaries { get; set; }
+        public DbSet<LabelEntity> Labels { get; set; }
+        public DbSet<ItemLabelEntity> ItemLabels { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<BaseEntity>().HasQueryFilter(p => p.IsDeleted == false);
+            modelBuilder.Entity<ItemEntity>().HasQueryFilter(p => p.IsDeleted == false);
+            modelBuilder.Entity<ItemListEntity>().HasQueryFilter(p => p.IsDeleted == false);
+            modelBuilder.Entity<BoardEntity>().HasQueryFilter(p => p.IsDeleted == false);
+            modelBuilder.Entity<BoardUserEntity>().HasQueryFilter(p => p.BoardEntity.IsDeleted == false);
+            modelBuilder.Entity<CheckItemEntity>().HasQueryFilter(p => p.IsDeleted == false);
+            modelBuilder.Entity<CheckListEntity>().HasQueryFilter(p => p.IsDeleted == false);
+            modelBuilder.Entity<CommentaryEntity>().HasQueryFilter(p => p.IsDeleted == false);
+            modelBuilder.Entity<LabelEntity>().HasQueryFilter(p => p.IsDeleted == false);
+            modelBuilder.Entity<ItemLabelEntity>().HasQueryFilter(p => p.LabelEntity.IsDeleted == false);
             modelBuilder.Entity<UserEntity>()
                 .HasMany(e => e.UserRoles)
                 .WithOne(e => e.User)

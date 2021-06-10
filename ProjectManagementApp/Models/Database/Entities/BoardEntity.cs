@@ -18,5 +18,6 @@ namespace ProjectManagementApp.Models.Database.Entities
         }
         public VisibilityType Visibility { get; set; }
         public List<BoardUserEntity> UserList { get; set; }
+        public List<LabelEntity> Labels { get; set; }
     }
 }
