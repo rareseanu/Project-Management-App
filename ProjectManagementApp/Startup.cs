@@ -95,6 +95,8 @@ namespace ProjectManagementApp
                 });
 
             services.AddHostedService<SeedDatabaseHostedService>();
+            services.AddHostedService<DisableInactiveUsersHostedService>();
+
             services.AddSingleton(new MapperConfiguration(p => p.AddProfile(new MappingProfile())).CreateMapper());
             services.AddControllers().AddNewtonsoftJson(x =>
                 x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
@@ -103,6 +105,7 @@ namespace ProjectManagementApp
             services.AddSingleton(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
 
             services.AddMvcCore(o => o.Filters.Add(new TokenAuthorizationFilter()));
+            //services.AddMvcCore(o => o.Filters.Add(new LoggedInTodayFilter()));
 
             services.AddSwaggerGen(c =>
             {

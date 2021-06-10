@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using ProjectManagementApp.Models.Responses.ItemList;
 using ProjectManagementApp.Models.Requests;
 using AutoMapper;
+using ProjectManagementApp.Models.Responses;
 
 namespace ProjectManagementApp.Services
 {
@@ -28,14 +29,27 @@ namespace ProjectManagementApp.Services
             this.mapper = mapper;
         }
 
-        public async Task<List<ItemListDetailResponse>> GetItemLists(int userId)
+        public async Task<BasePaginationResponse<ItemListDetailResponse>> GetItemLists(int userId)
         {
-            var result = await Get(p => p.CreatedBy == userId)
-                .Skip(pagination.Size * (pagination.Page - 1))
-                .Take(pagination.Size)
-                .ToListAsync();
+            List<ItemListEntity> result;
+            if (pagination.Size != 0)
+            {
+                result = await Get(p => p.CreatedBy == userId)
+                    .Skip(pagination.Size * (pagination.Page - 1))
+                    .Take(pagination.Size)
+                    .ToListAsync();
+            }
+            else
+            {
+                result = await Get(p => p.CreatedBy == userId).ToListAsync();
+            }
 
-            return mapper.Map<List<ItemListDetailResponse>>(result);
+            return new BasePaginationResponse<ItemListDetailResponse>()
+            {
+                Data = mapper.Map<List<ItemListDetailResponse>>(result),
+
+                TotalCount = result.Count
+            };
         }
         public async Task<ItemListEntity> GetItemList(int itemListId)
         {

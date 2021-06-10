@@ -19,23 +19,6 @@ namespace ProjectManagementApp.Services
             client = new SendGridClient(emailConfiguration.ApiKey);
         }
 
-        public async Task<bool> SendTestEmail(string message)
-        {
-            var msg = MailHelper.CreateSingleEmail(
-                new EmailAddress(emailConfiguration.FromAddress, "Dragos"),
-                new EmailAddress("moiseanurares@gmail.com", "Rares"),
-                "Test Subject",
-                message,
-                null);
-
-            var response = await client.SendEmailAsync(msg);
-
-            if (response.IsSuccessStatusCode)
-                return true;
-
-            return false;
-        }
-
         public async Task<bool> SendEmailConfirmation(string email, string code)
         {
             var message = MailHelper.CreateSingleTemplateEmail(

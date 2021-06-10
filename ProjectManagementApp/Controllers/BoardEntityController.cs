@@ -38,6 +38,7 @@ namespace ProjectManagementApp.Controllers
             return null;
         }
         [Authorize(Roles = "Admin")]
+        [PaginationResourceFilter]
         [HttpGet]
         public async Task<ObjectResult> GetAll()
         {

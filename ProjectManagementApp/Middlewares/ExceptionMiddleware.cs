@@ -30,6 +30,10 @@ namespace ProjectManagementApp.Middlewares
             {
                 try
                 {
+                    if (context.Request.Query["hide"] == "true")
+                    {
+                        throw new CustomException("Error", HttpStatusCode.NoContent);
+                    }
                     await next(context);
                 }
                 catch (NotFoundException ex)

@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using ProjectManagementApp.Models.Database.Entities;
+using ProjectManagementApp.Models.Requests;
+using ProjectManagementApp.Models.Responses;
+using ProjectManagementApp.Models.Responses.Board;
 using ProjectManagementApp.Models.Responses.ItemList;
 
 namespace ProjectManagementApp.Helpers
@@ -13,6 +16,7 @@ namespace ProjectManagementApp.Helpers
         public MappingProfile()
         {
             CreateMap<ItemListEntity, ItemListDetailResponse>();
+            CreateMap<BoardEntity, BoardDetailResponse>();
         }
     }
 }
