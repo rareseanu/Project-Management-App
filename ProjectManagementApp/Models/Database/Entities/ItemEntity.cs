@@ -11,7 +11,7 @@ namespace ProjectManagementApp.Models.Database.Entities
     {
         public string Title { get; set; }
         public string? Description { get; set; }
-        public List<CheckListEntity> CheckLists { get; set; }
+        public CheckListEntity CheckLists { get; set; }
         public List<CommentaryEntity> CommentaryList { get; set; }
         public int ItemListEntityId { get; set; }
         public ItemListEntity ItemListEntity { get; set; }

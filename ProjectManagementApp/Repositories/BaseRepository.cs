@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProjectManagementApp.Models.Database;
 using ProjectManagementApp.Models.Database.Entities;
+using ProjectManagementApp.Models.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

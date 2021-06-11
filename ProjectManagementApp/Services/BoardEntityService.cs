@@ -94,7 +94,7 @@ namespace ProjectManagementApp.Services
             {
                 Data = mapper.Map<List<BoardDetailResponse>>(result),
 
-                TotalCount = result.Count
+                TotalCount = await GetAll().CountAsync()
             };
         }
         public async Task<BoardUserEntity> GivePermissionToUser(BoardUserEntity boardUser)

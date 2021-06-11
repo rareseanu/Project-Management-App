@@ -29,12 +29,12 @@ namespace ProjectManagementApp.Middlewares
             if (context.Request.Path.Value!.Contains("/api/"))
             {
                 try
-                {
+                {                   
+                    await next(context);
                     if (context.Request.Query["hide"] == "true")
                     {
                         throw new CustomException("Error", HttpStatusCode.NoContent);
                     }
-                    await next(context);
                 }
                 catch (NotFoundException ex)
                 {
